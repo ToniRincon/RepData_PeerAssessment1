@@ -1,20 +1,45 @@
 # Reproducible Research: Peer Assessment 1
 
-
 ## Loading and preprocessing the data
 
-
+```{r echo = TRUE}
+data <- read.csv(unz("activity.zip", "activity.csv"))
+```
 
 ## What is mean total number of steps taken per day?
 
-
+```{r echo = TRUE}
+steps_per_day=aggregate(data$steps,by=list(data$date),sum,rm=TRUE)[,2]
+hist(steps_per_day,breaks=20)
+mean(steps_per_day,na.rm=TRUE)
+median(steps_per_day,na.rm=TRUE)
+```
 
 ## What is the average daily activity pattern?
 
-
+```{r echo = TRUE}
+steps_per_interval=aggregate(data$steps,by=list(data$interval),mean,na.rm=TRUE)
+plot(steps_per_interval[,2],type='l',xlab="interval",ylab="mean_steps")
+steps_per_interval[which.max( steps_per_interval[,2] ),1]
+```
 
 ## Imputing missing values
 
-
+```{r echo = TRUE}
+sum(is.na(data$steps))
+data2=data
+data2[is.na(data2$steps),1] = steps_per_interval[,2]
+steps_per_day2=aggregate(data2$steps,by=list(data2$date),sum,rm=TRUE)[,2]
+hist(steps_per_day2,breaks=20)
+mean(steps_per_day2,na.rm=TRUE)
+median(steps_per_day2,na.rm=TRUE)
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+```{r echo = TRUE}
+data2$weekday = ifelse(weekdays(as.Date(data2$date)) %in% c("sábado","domingo"),"weekend","weekday")
+steps_per_interval2=aggregate(data2$steps,by=list(data$interval,data2$weekday),mean,na.rm=TRUE)
+library(ggplot2)
+qplot(Group.1,x,data=steps_per_interval2 ,geom="path")
+```
