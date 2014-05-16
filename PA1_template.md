@@ -4,6 +4,14 @@
 
 
 ```r
+Sys.setlocale("LC_TIME", "English")
+```
+
+```
+## [1] "English_United States.1252"
+```
+
+```r
 data <- read.csv(unz("activity.zip", "activity.csv"))
 ```
 
@@ -97,12 +105,13 @@ median(steps_per_day2, na.rm = TRUE)
 
 
 ```r
-data2$weekday = ifelse(weekdays(as.Date(data2$date)) %in% c("sábado", "domingo"), 
-    "weekend", "weekday")
+data2$weekday = factor(ifelse(weekdays(as.Date(data2$date)) %in% c("Saturday", 
+    "Sunday"), "weekend", "weekday"))
 steps_per_interval2 = aggregate(data2$steps, by = list(data$interval, data2$weekday), 
     mean, na.rm = TRUE)
-library(ggplot2)
-qplot(Group.1, x, data = steps_per_interval2, geom = "path")
+names(steps_per_interval2) = c("interval", "weekday", "steps")
+library(lattice)
+xyplot(steps ~ interval | weekday, steps_per_interval2, type = "l")
 ```
 
 ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 
