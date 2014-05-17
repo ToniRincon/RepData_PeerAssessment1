@@ -111,7 +111,8 @@ steps_per_interval2 = aggregate(data2$steps, by = list(data$interval, data2$week
     mean, na.rm = TRUE)
 names(steps_per_interval2) = c("interval", "weekday", "steps")
 library(lattice)
-xyplot(steps ~ interval | weekday, steps_per_interval2, type = "l")
+xyplot(steps ~ interval | weekday, steps_per_interval2, type = "l", layout = c(1, 
+    2))
 ```
 
 ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 

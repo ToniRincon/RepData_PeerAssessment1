@@ -43,5 +43,5 @@ data2$weekday = factor(ifelse(weekdays(as.Date(data2$date)) %in% c("Saturday","S
 steps_per_interval2=aggregate(data2$steps,by=list(data$interval,data2$weekday),mean,na.rm=TRUE)
 names(steps_per_interval2) = c("interval","weekday","steps")
 library(lattice)
-xyplot(steps ~ interval| weekday, steps_per_interval2,type='l')
+xyplot(steps ~ interval| weekday, steps_per_interval2,type='l',layout=c(1,2))
 ```
